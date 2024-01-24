@@ -14,7 +14,7 @@ public class UnitOfWorks : IUnitOfWorks
     public ILogRepo LogRepo { get; }
     public IPatientRepo PatientRepo { get; }
     public IProblemRepo ProblemRepo { get; }
-    public IRoleRepo RoleRepo { get; }
+
     public IUserRepo UserRepo { get; }
     private readonly MedicalPlusDbContext _dbContext;
 
@@ -29,7 +29,7 @@ public class UnitOfWorks : IUnitOfWorks
         LogRepo = new LogRepo(_dbContext);
         PatientRepo = new PatientRepo(_dbContext);
         ProblemRepo = new ProblemRepo(_dbContext);
-        RoleRepo = new RoleRepo(_dbContext);  
+     
         UserRepo = new UserRepo(_dbContext);
     }
 

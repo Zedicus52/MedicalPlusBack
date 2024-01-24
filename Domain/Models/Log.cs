@@ -8,7 +8,7 @@ public partial class Log
 {
     public int IdLog { get; set; }
 
-    public int IdUser { get; set; }
+    public string IdUser { get; set; }
 
     public int? IdAction { get; set; }
 

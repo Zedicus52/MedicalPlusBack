@@ -3,7 +3,9 @@ using DataAccessEF.Data;
 using DataAccessEF.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -53,7 +55,6 @@ builder.Services.AddTransient<IGenderRepo, GenderRepo>();
 builder.Services.AddTransient<ILogRepo, LogRepo>();
 builder.Services.AddTransient<IPatientRepo, PatientRepo>();
 builder.Services.AddTransient<IProblemRepo, ProblemRepo>();
-builder.Services.AddTransient<IRoleRepo, RoleRepo>();
 builder.Services.AddTransient<IUserRepo, UserRepo>();
 
 builder.Services.AddDbContext<MedicalPlusDbContext>(options =>
@@ -61,7 +62,9 @@ builder.Services.AddDbContext<MedicalPlusDbContext>(options =>
         builder.Configuration.GetConnectionString("Local"),
         b => b.MigrationsAssembly(typeof(MedicalPlusDbContext).Assembly.FullName)));
 
-
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<MedicalPlusDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(opt => 
 {
