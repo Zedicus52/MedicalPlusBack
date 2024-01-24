@@ -9,7 +9,7 @@ public interface IUnitOfWorks : IDisposable
         public ILogRepo LogRepo { get; }
         public IPatientRepo PatientRepo { get; }
         public IProblemRepo ProblemRepo { get; }
-        public IRoleRepo RoleRepo { get; }
+      
         public IUserRepo UserRepo { get; }
 
         int Commit();

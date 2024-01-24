@@ -8,7 +8,7 @@ public partial class Problem
 {
     public int IdProblem { get; set; }
 
-    public int IdUser { get; set; }
+    public string IdUser { get; set; }
 
     public int? IdDifficulty { get; set; }
 
