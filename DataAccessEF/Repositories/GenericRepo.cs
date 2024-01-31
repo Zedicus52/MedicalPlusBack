@@ -18,7 +18,7 @@ public class GenericRepo<T> : IGenericRepo<T> where T : class
         return _dbContext.Set<T>().ToListAsync();
     }
 
-    public ValueTask<T?> GetById(int id)
+    public ValueTask<T?> GetById(string id)
     {
         return _dbContext.Set<T>().FindAsync(id);
     }
@@ -28,7 +28,7 @@ public class GenericRepo<T> : IGenericRepo<T> where T : class
         _dbContext.Set<T>().Add(item);
     }
 
-    public void Delete(int id)
+    public void Delete(string id)
     {
         var item = _dbContext.Set<T>().Find(id);
         if (item != null) 
