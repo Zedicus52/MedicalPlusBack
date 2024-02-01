@@ -20,7 +20,7 @@ public partial class Log
 
     public DateTime? ChangeDate { get; set; }
 
-    public virtual Action? IdActionNavigation { get; set; }
+    public virtual LogAction? IdActionNavigation { get; set; }
 
     public virtual User IdUserNavigation { get; set; } = null!;
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MedicalPlus.Controllers
 {
-    [Route("api/difficulty")]
+    [Route("api/actionLog")]
     [Authorize]
     [ApiController]
     public class ActionController : Controller
@@ -44,7 +44,7 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Action user)
+        public async Task<IActionResult> Update(LogAction user)
         {
             this._unitOfWorks.ActionRepo.Update(user);
             this._unitOfWorks.Commit();
@@ -53,7 +53,7 @@ namespace MedicalPlus.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(Action user)
+        public async Task<IActionResult> Create(LogAction user)
         {
             this._unitOfWorks.ActionRepo.Add(user);
             this._unitOfWorks.Commit();

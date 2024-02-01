@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Models;
 
-public partial class Action
+public partial class LogAction
 {
     
     public int IdAction { get; set; }
