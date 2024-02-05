@@ -1,6 +1,7 @@
 ﻿using DataAccessEF.UnitOfWorks;
 using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
+using Domain.Models.WebModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,18 +45,21 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Problem user)
+        public async Task<IActionResult> Update(Problem problem)
         {
-            this._unitOfWorks.ProblemRepo.Update(user);
+            this._unitOfWorks.ProblemRepo.Update(problem);
             this._unitOfWorks.Commit();
             return Ok();
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(Problem user)
+        public async Task<IActionResult> Create(ProblemModel problem)
         {
-            this._unitOfWorks.ProblemRepo.Add(user);
+            User user = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
+            Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty.ToString());
+            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty);
+            this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();
             return Ok();
         }

@@ -27,4 +27,16 @@ public partial class Problem
     public virtual User IdUserNavigation { get; set; } = null!;
 
     public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
+    public Problem(string diagnosis, string micro, string macro, DateTime creation, DateTime change, User user, Difficulty difficulty)
+    {
+        this.IdDifficultyNavigation = difficulty;
+        this.IdDifficulty = difficulty.IdDifficulty;
+        this.MicroDesc = micro;
+        this.MacroDesc = macro;
+        this.Diagnosis = diagnosis;
+        this.IdUser = user.Id;
+        this.IdUserNavigation = user;
+        this.CreationDate = creation;
+        this.ChangeDate = change;
+    }
 }

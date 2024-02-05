@@ -1,6 +1,7 @@
 ﻿using DataAccessEF.UnitOfWorks;
 using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
+using Domain.Models.WebModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,18 +45,20 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Difficulty user)
+        public async Task<IActionResult> Update(Difficulty difficulty)
         {
-            this._unitOfWorks.DifficultyRepo.Update(user);
+            this._unitOfWorks.DifficultyRepo.Update(difficulty);
             this._unitOfWorks.Commit();
             return Ok();
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(Difficulty user)
+        public async Task<IActionResult> Create(DifficultyModel difficulty)
         {
-            this._unitOfWorks.DifficultyRepo.Add(user);
+
+            Difficulty difficultyModel = new Difficulty(difficulty.Name);
+            this._unitOfWorks.DifficultyRepo.Add(difficultyModel);
             this._unitOfWorks.Commit();
             return Ok();
         }

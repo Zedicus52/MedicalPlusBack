@@ -11,4 +11,8 @@ public partial class LogAction
     public string ActionText { get; set; } = null!;
 
     public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
+    public LogAction(string action)
+    {
+        this.ActionText = action;
+    }
 }

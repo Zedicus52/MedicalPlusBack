@@ -1,6 +1,7 @@
 ﻿using DataAccessEF.UnitOfWorks;
 using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
+using Domain.Models.WebModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,18 +45,26 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Patient user)
+        public async Task<IActionResult> Update(Patient patient)
         {
-            this._unitOfWorks.PatientRepo.Update(user);
+            this._unitOfWorks.PatientRepo.Update(patient);
             this._unitOfWorks.Commit();
             return Ok();
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(Patient user)
+        public async Task<IActionResult> Create(PatientModel patient)
         {
-            this._unitOfWorks.PatientRepo.Add(user);
+            Fio fio = new Fio(patient.Fio.Name, patient.Fio.Surname, patient.Fio.Patronymic);
+            this._unitOfWorks.FioRepo.Add(fio);
+           
+            Gender gender = new Gender(patient.Gender.Name);
+            this._unitOfWorks.FioRepo.Add(fio);
+            this._unitOfWorks.Commit();
+            
+            Patient patientModel = new Patient(patient.PhoneNumber, patient.BirthDate, patient.ApplicationDate, fio, gender);
+            this._unitOfWorks.PatientRepo.Add(patientModel);
             this._unitOfWorks.Commit();
             return Ok();
         }

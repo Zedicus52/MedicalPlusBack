@@ -13,7 +13,7 @@ namespace MedicalPlus.Helpers
             var token = new JwtSecurityToken(
                     issuer: _configuration["JWT:ValidIssuer"],
                     audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(6),
+                    expires: DateTime.UtcNow.AddHours(6),
                     claims: claimsList,
                     signingCredentials: new SigningCredentials(signKey, SecurityAlgorithms.HmacSha256)
                 );

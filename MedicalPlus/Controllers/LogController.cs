@@ -1,6 +1,7 @@
 ﻿using DataAccessEF.UnitOfWorks;
 using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
+using Domain.Models.WebModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,18 +45,23 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Log user)
+        public async Task<IActionResult> Update(Log log)
         {
-            this._unitOfWorks.LogRepo.Update(user);
+            log.ChangeDate = DateTime.UtcNow;
+            this._unitOfWorks.LogRepo.Update(log);
             this._unitOfWorks.Commit();
             return Ok();
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(Log user)
+        public async Task<IActionResult> Create(LogModel log)
         {
-            this._unitOfWorks.LogRepo.Add(user);
+
+            LogAction logAction= await this._unitOfWorks.ActionRepo.GetById(log.IdAction.ToString());
+            User user = await this._unitOfWorks.UserRepo.GetById(log.IdUser.ToString());
+            Log logModel = new Log(log.ObjectName, log.Message, DateTime.UtcNow, DateTime.UtcNow, logAction, user);
+            this._unitOfWorks.LogRepo.Add(logModel);
             this._unitOfWorks.Commit();
             return Ok();
         }
