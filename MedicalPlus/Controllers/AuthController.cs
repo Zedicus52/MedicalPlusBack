@@ -13,7 +13,7 @@ using System.Security.Claims;
 
 namespace MedicalPlus.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -28,12 +28,6 @@ namespace MedicalPlus.Controllers
             this._roleManager = roleManager;
             this._configuration = configuration;
         }
-
-     
-
-
-      
-       
 
         [HttpPost]
         [Route("login")]
@@ -73,9 +67,6 @@ namespace MedicalPlus.Controllers
             }
             return Unauthorized();
         }
-
-
-
 
         [HttpPost]
         [Route("regUser")]

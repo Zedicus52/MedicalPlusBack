@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Models.WebModels;
+using System;
 using System.Collections.Generic;
 
 
@@ -20,9 +21,20 @@ public partial class Patient
 
     public DateTime ApplicationDate { get; set; }
 
-    public virtual Fio? IdFioNavigation { get; set; }
+    public Fio? IdFioNavigation { get; set; }
 
-    public virtual Gender? IdGenderNavigation { get; set; }
+    public Gender? IdGenderNavigation { get; set; }
 
-    public virtual Problem? IdProblemNavigation { get; set; }
+    public Problem? IdProblemNavigation { get; set; }
+
+    public Patient(int phoneNumber, DateTime birthday, DateTime applicationDate,Fio fio,Gender gender)
+    {
+        this.PhoneNumber = phoneNumber;
+        this.BirthDate = birthday;
+        this.ApplicationDate= applicationDate;
+        this.IdFio = fio.IdFio; 
+        this.IdGender = gender.IdGender;
+        this.IdGenderNavigation = gender;
+        this.IdFioNavigation = fio;
+    }
 }

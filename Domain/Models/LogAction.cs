@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Models;
 
-public partial class Action
+public partial class LogAction
 {
     
     public int IdAction { get; set; }
@@ -11,4 +11,8 @@ public partial class Action
     public string ActionText { get; set; } = null!;
 
     public virtual ICollection<Log> Logs { get; set; } = new List<Log>();
+    public LogAction(string action)
+    {
+        this.ActionText = action;
+    }
 }

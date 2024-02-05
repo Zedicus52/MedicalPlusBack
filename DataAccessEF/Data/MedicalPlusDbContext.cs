@@ -13,7 +13,7 @@ public partial class MedicalPlusDbContext : IdentityDbContext<User>
     {
     }
 
-    public virtual DbSet<Domain.Models.Action> Actions { get; set; }
+    public virtual DbSet<LogAction> Actions { get; set; }
 
     public virtual DbSet<Difficulty> Difficulties { get; set; }
 
@@ -35,7 +35,7 @@ public partial class MedicalPlusDbContext : IdentityDbContext<User>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<Domain.Models.Action>(entity =>
+        modelBuilder.Entity<Domain.Models.LogAction>(entity =>
         {
             entity.HasKey(e => e.IdAction);
             entity.Property(e => e.ActionText).HasColumnName("Action");
