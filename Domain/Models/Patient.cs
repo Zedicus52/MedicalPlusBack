@@ -27,6 +27,11 @@ public partial class Patient
 
     public Problem? IdProblemNavigation { get; set; }
 
+    public Patient()
+    {
+        
+    }
+
     public Patient(int phoneNumber, DateTime birthday, DateTime applicationDate,Fio fio,Gender gender)
     {
         this.PhoneNumber = phoneNumber;

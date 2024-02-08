@@ -18,6 +18,11 @@ public partial class Fio
     public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
+
+    public Fio()
+    {
+        
+    }
     public Fio(string name, string surname, string patronymic)
     {
     

@@ -23,6 +23,11 @@ public partial class Log
     public virtual LogAction? IdActionNavigation { get; set; }
 
     public virtual User IdUserNavigation { get; set; } = null!;
+
+    public Log()
+    {
+        
+    }
     public Log(string objectName, string message, DateTime creationDate, DateTime changeDate, LogAction action, User user)
     {
         this.ObjectName = objectName;
