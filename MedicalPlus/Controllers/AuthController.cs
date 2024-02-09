@@ -94,7 +94,7 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getRoles")]
-        [Authorize(Roles = UserRoles.Admin)]
+        [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Doctor}")]
         public IActionResult GetAllRoles()
         {
             List<RoleModel> roles = new List<RoleModel>();  

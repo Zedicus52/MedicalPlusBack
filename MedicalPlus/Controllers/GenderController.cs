@@ -13,16 +13,16 @@ namespace MedicalPlus.Controllers
     public class GenderController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public GenderController(UnitOfWorks unitOfWorks)
+        public GenderController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }
 
         [HttpGet]
         [Route("getAll")]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            return Ok(this._unitOfWorks.GenderRepo.GetAll());
+            return Ok(_unitOfWorks.GenderRepo.GetAll().Result);
         }
 
 
@@ -54,11 +54,11 @@ namespace MedicalPlus.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(GenderModel gender)
+        public IActionResult Create(GenderModel gender)
         {
             Gender genderModel = new Gender(gender.Name);
-            this._unitOfWorks.GenderRepo.Add(genderModel);
-            this._unitOfWorks.Commit();
+            _unitOfWorks.GenderRepo.Add(genderModel);
+            _unitOfWorks.Commit();
             return Ok();
         }
     }
