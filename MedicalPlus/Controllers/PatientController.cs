@@ -13,16 +13,16 @@ namespace MedicalPlus.Controllers
     public class PatientController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public PatientController(UnitOfWorks unitOfWorks)
+        public PatientController(IUnitOfWorks unitOfWorks)
         {
-            this._unitOfWorks = unitOfWorks;
+            _unitOfWorks = unitOfWorks;
         }
 
         [HttpGet]
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(this._unitOfWorks.PatientRepo.GetAll());
+            return Ok(_unitOfWorks.PatientRepo.GetAll().Result);
         }
 
 
@@ -54,18 +54,23 @@ namespace MedicalPlus.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(PatientModel patient)
+        public async Task<IActionResult> Create([FromBody]PatientModel patient)
         {
             Fio fio = new Fio(patient.Fio.Name, patient.Fio.Surname, patient.Fio.Patronymic);
-            this._unitOfWorks.FioRepo.Add(fio);
+            _unitOfWorks.FioRepo.Add(fio);
+            _unitOfWorks.Commit();
            
-            Gender gender = new Gender(patient.Gender.Name);
-            this._unitOfWorks.FioRepo.Add(fio);
-            this._unitOfWorks.Commit();
+            Gender? gender = _unitOfWorks.GenderRepo.GetAll().Result.FirstOrDefault(g => g.IdGender.Equals(patient.Gender.IdGender));
+            if (gender == null)
+            {
+                gender = new Gender(patient.Gender.Name);
+                _unitOfWorks.GenderRepo.Add(gender);
+                _unitOfWorks.Commit();
+            }
             
             Patient patientModel = new Patient(patient.PhoneNumber, patient.BirthDate, patient.ApplicationDate, fio, gender);
-            this._unitOfWorks.PatientRepo.Add(patientModel);
-            this._unitOfWorks.Commit();
+            _unitOfWorks.PatientRepo.Add(patientModel);
+            _unitOfWorks.Commit();
             return Ok();
         }
     }
