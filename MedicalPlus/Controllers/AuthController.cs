@@ -92,6 +92,32 @@ namespace MedicalPlus.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("getRoles")]
+        [Authorize(Roles = UserRoles.Admin)]
+        public IActionResult GetAllRoles()
+        {
+            List<RoleModel> roles = new List<RoleModel>();  
+            foreach (var role in _roleManager.Roles)
+            {
+                RoleModel model = new()
+                {
+                    Id = role.Id
+                };
+                model.Name = role.Name switch
+                {
+                    UserRoles.Admin => "Адміністратор",
+                    UserRoles.Doctor => "Доктор",
+                    UserRoles.Assistant => "Лаборант",
+                    UserRoles.Recorder => "Регістратор",
+                    _ => model.Name
+                };
+                if(string.IsNullOrEmpty(model.Name) == false)
+                    roles.Add(model);
+            }
+            return Ok(roles);
+        }
+
         [HttpPost]
         [Route("setAdmin")]
         [Authorize(Roles = UserRoles.Admin)]
