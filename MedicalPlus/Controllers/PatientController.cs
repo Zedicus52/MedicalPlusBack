@@ -22,7 +22,28 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_unitOfWorks.PatientRepo.GetAll().Result);
+            List<PatientModel> result = new List<PatientModel>();
+            var patients = await _unitOfWorks.PatientRepo.GetAll();
+            var fios = await _unitOfWorks.FioRepo.GetAll();
+            var genders = await _unitOfWorks.GenderRepo.GetAll();
+
+            foreach (var patient in patients)
+            {
+                PatientModel model = new PatientModel
+                {
+                    PhoneNumber = patient.PhoneNumber,
+                    ApplicationDate = patient.ApplicationDate,
+                    BirthDate = patient.BirthDate,
+                    IdPatient = patient.IdPatient
+                };
+                Fio fio = fios.FirstOrDefault(x => x.IdFio.Equals(patient.IdFio));
+                Gender gender = genders.FirstOrDefault(x => x.IdGender.Equals(patient.IdGender));
+                model.Fio = new FioModel(fio.IdFio, fio.Name, fio.Surname, fio.Patronymic);
+                model.Gender = new GenderModel(gender.IdGender, gender.Name);
+                result.Add(model);
+            }
+            
+            return Ok(result);
         }
 
 

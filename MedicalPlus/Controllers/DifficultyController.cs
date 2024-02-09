@@ -13,16 +13,16 @@ namespace MedicalPlus.Controllers
     public class DifficultyController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public DifficultyController(UnitOfWorks unitOfWorks)
+        public DifficultyController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }
 
         [HttpGet]
         [Route("getAll")]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            return Ok(this._unitOfWorks.DifficultyRepo.GetAll());
+            return Ok(_unitOfWorks.DifficultyRepo.GetAll().Result);
         }
 
 
