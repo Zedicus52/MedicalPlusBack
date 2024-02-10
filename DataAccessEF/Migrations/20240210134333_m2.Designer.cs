@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccessEF.Migrations
 {
     [DbContext(typeof(MedicalPlusDbContext))]
-    [Migration("20240124103819_m3")]
-    partial class m3
+    [Migration("20240210134333_m2")]
+    partial class m2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,24 +24,6 @@ namespace DataAccessEF.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Models.Action", b =>
-                {
-                    b.Property<int>("IdAction")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdAction"));
-
-                    b.Property<string>("ActionText")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Action");
-
-                    b.HasKey("IdAction");
-
-                    b.ToTable("Actions");
-                });
 
             modelBuilder.Entity("Domain.Models.Difficulty", b =>
                 {
@@ -141,6 +123,24 @@ namespace DataAccessEF.Migrations
                     b.ToTable("Logs");
                 });
 
+            modelBuilder.Entity("Domain.Models.LogAction", b =>
+                {
+                    b.Property<int>("IdAction")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdAction"));
+
+                    b.Property<string>("ActionText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Action");
+
+                    b.HasKey("IdAction");
+
+                    b.ToTable("Actions");
+                });
+
             modelBuilder.Entity("Domain.Models.Patient", b =>
                 {
                     b.Property<int>("IdPatient")
@@ -161,9 +161,6 @@ namespace DataAccessEF.Migrations
                     b.Property<int?>("IdGender")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdProblem")
-                        .HasColumnType("int");
-
                     b.Property<int>("PhoneNumber")
                         .HasColumnType("int");
 
@@ -172,8 +169,6 @@ namespace DataAccessEF.Migrations
                     b.HasIndex("IdFio");
 
                     b.HasIndex("IdGender");
-
-                    b.HasIndex("IdProblem");
 
                     b.ToTable("Patients");
                 });
@@ -199,6 +194,9 @@ namespace DataAccessEF.Migrations
                     b.Property<int?>("IdDifficulty")
                         .HasColumnType("int");
 
+                    b.Property<int?>("IdPatient")
+                        .HasColumnType("int");
+
                     b.Property<string>("IdUser")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -215,9 +213,81 @@ namespace DataAccessEF.Migrations
 
                     b.HasIndex("IdDifficulty");
 
+                    b.HasIndex("IdPatient");
+
                     b.HasIndex("IdUser");
 
                     b.ToTable("Problems");
+                });
+
+            modelBuilder.Entity("Domain.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("IdFio")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdFio");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -270,79 +340,6 @@ namespace DataAccessEF.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -426,21 +423,9 @@ namespace DataAccessEF.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.Models.User", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<int?>("IdFio")
-                        .HasColumnType("int");
-
-                    b.HasIndex("IdFio");
-
-                    b.HasDiscriminator().HasValue("User");
-                });
-
             modelBuilder.Entity("Domain.Models.Log", b =>
                 {
-                    b.HasOne("Domain.Models.Action", "IdActionNavigation")
+                    b.HasOne("Domain.Models.LogAction", "IdActionNavigation")
                         .WithMany("Logs")
                         .HasForeignKey("IdAction")
                         .HasConstraintName("FK_Logs_Actions");
@@ -468,16 +453,9 @@ namespace DataAccessEF.Migrations
                         .HasForeignKey("IdGender")
                         .HasConstraintName("FK_Patients_Genders");
 
-                    b.HasOne("Domain.Models.Problem", "IdProblemNavigation")
-                        .WithMany("Patients")
-                        .HasForeignKey("IdProblem")
-                        .HasConstraintName("FK_Patients_Problems");
-
                     b.Navigation("IdFioNavigation");
 
                     b.Navigation("IdGenderNavigation");
-
-                    b.Navigation("IdProblemNavigation");
                 });
 
             modelBuilder.Entity("Domain.Models.Problem", b =>
@@ -487,6 +465,11 @@ namespace DataAccessEF.Migrations
                         .HasForeignKey("IdDifficulty")
                         .HasConstraintName("FK_Problems_Difficulties");
 
+                    b.HasOne("Domain.Models.Patient", "IdPatientNavigation")
+                        .WithMany("Problems")
+                        .HasForeignKey("IdPatient")
+                        .HasConstraintName("FK_Problems_Patients");
+
                     b.HasOne("Domain.Models.User", "IdUserNavigation")
                         .WithMany("Problems")
                         .HasForeignKey("IdUser")
@@ -495,7 +478,19 @@ namespace DataAccessEF.Migrations
 
                     b.Navigation("IdDifficultyNavigation");
 
+                    b.Navigation("IdPatientNavigation");
+
                     b.Navigation("IdUserNavigation");
+                });
+
+            modelBuilder.Entity("Domain.Models.User", b =>
+                {
+                    b.HasOne("Domain.Models.Fio", "IdFioNavigation")
+                        .WithMany("Users")
+                        .HasForeignKey("IdFio")
+                        .HasConstraintName("FK_Users_FIOs");
+
+                    b.Navigation("IdFioNavigation");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -509,7 +504,7 @@ namespace DataAccessEF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -518,7 +513,7 @@ namespace DataAccessEF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -533,7 +528,7 @@ namespace DataAccessEF.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -542,26 +537,11 @@ namespace DataAccessEF.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                    b.HasOne("Domain.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.Models.User", b =>
-                {
-                    b.HasOne("Domain.Models.Fio", "IdFioNavigation")
-                        .WithMany("Users")
-                        .HasForeignKey("IdFio")
-                        .HasConstraintName("FK_Users_FIOs");
-
-                    b.Navigation("IdFioNavigation");
-                });
-
-            modelBuilder.Entity("Domain.Models.Action", b =>
-                {
-                    b.Navigation("Logs");
                 });
 
             modelBuilder.Entity("Domain.Models.Difficulty", b =>
@@ -581,9 +561,14 @@ namespace DataAccessEF.Migrations
                     b.Navigation("Patients");
                 });
 
-            modelBuilder.Entity("Domain.Models.Problem", b =>
+            modelBuilder.Entity("Domain.Models.LogAction", b =>
                 {
-                    b.Navigation("Patients");
+                    b.Navigation("Logs");
+                });
+
+            modelBuilder.Entity("Domain.Models.Patient", b =>
+                {
+                    b.Navigation("Problems");
                 });
 
             modelBuilder.Entity("Domain.Models.User", b =>

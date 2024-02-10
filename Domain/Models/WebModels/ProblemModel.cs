@@ -13,6 +13,7 @@ namespace Domain.Models.WebModels
         public string IdUser { get; set; }
 
         public int IdDifficulty { get; set; }
+        public int IdPatient { get; set; }
 
         public string Diagnosis { get; set; } 
 

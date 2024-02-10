@@ -39,11 +39,6 @@ namespace MedicalPlus.Controllers
 
 
 
-                if (!await _userManager.IsEmailConfirmedAsync(user))
-                {
-                    return BadRequest("You are not confirmed mail");
-                }
-
                 var userRole = await this._userManager.GetRolesAsync(user);
                 var authClaims = new List<Claim> {
 

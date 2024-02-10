@@ -58,7 +58,8 @@ namespace MedicalPlus.Controllers
         {
             User user = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
             Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty.ToString());
-            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty);
+            Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient.ToString());
+            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty,patient);
             this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();
             return Ok();

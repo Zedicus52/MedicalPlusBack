@@ -80,9 +80,6 @@ public partial class MedicalPlusDbContext : IdentityDbContext<User>
             entity.HasOne(d => d.IdGenderNavigation).WithMany(p => p.Patients)
                 .HasForeignKey(d => d.IdGender)
                 .HasConstraintName("FK_Patients_Genders");
-            entity.HasOne(d => d.IdProblemNavigation).WithMany(p => p.Patients)
-                .HasForeignKey(d => d.IdProblem)
-                .HasConstraintName("FK_Patients_Problems");
         });
 
         modelBuilder.Entity<Problem>(entity =>
@@ -97,6 +94,9 @@ public partial class MedicalPlusDbContext : IdentityDbContext<User>
                 .HasForeignKey(d => d.IdUser)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Problems_Users");
+            entity.HasOne(d => d.IdPatientNavigation).WithMany(p => p.Problems)
+                .HasForeignKey(d => d.IdPatient)
+                .HasConstraintName("FK_Problems_Patients");
         });
 
 
