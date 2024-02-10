@@ -27,7 +27,7 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(this._unitOfWorks.UserRepo.GetAll());
+            return Ok(this._unitOfWorks.UserRepo.GetAll().Result);
         }
 
 

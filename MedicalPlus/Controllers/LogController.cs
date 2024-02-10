@@ -22,7 +22,7 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(this._unitOfWorks.LogRepo.GetAll());
+            return Ok(this._unitOfWorks.LogRepo.GetAll().Result);
         }
 
 

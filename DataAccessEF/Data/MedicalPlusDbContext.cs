@@ -29,9 +29,7 @@ public partial class MedicalPlusDbContext : IdentityDbContext<User>
 
 
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-       => optionsBuilder.UseSqlServer("Server=ZEDICUS-LAPTOP\\SQLEXPRESS;Database=MedicalPlus;Trusted_Connection=True;Encrypt=false;");
-
+  
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
