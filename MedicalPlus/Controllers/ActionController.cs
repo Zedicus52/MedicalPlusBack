@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class ActionController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public ActionController(UnitOfWorks unitOfWorks)
+        public ActionController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }

@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class GenderController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public GenderController(UnitOfWorks unitOfWorks)
+        public GenderController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }

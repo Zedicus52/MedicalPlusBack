@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class LogController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public LogController(UnitOfWorks unitOfWorks)
+        public LogController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }

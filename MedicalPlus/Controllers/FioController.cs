@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class FioController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public FioController(UnitOfWorks unitOfWorks)
+        public FioController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }

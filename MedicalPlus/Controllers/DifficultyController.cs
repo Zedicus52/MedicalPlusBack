@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class DifficultyController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public DifficultyController(UnitOfWorks unitOfWorks)
+        public DifficultyController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }

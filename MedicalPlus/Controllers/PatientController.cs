@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class PatientController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public PatientController(UnitOfWorks unitOfWorks)
+        public PatientController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }
