@@ -1,4 +1,5 @@
 ﻿using Domain.Identity;
+using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
 using Domain.Models.WebModels;
 using MedicalPlus.Helpers;
@@ -21,12 +22,14 @@ namespace MedicalPlus.Controllers
         private readonly IConfiguration _configuration;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<User> _userManager;
+        private readonly IUnitOfWorks _unitOfWorks;
 
-        public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IUnitOfWorks unitOfWorks)
         {
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._configuration = configuration;
+            _unitOfWorks = unitOfWorks; 
         }
 
         [HttpPost]
@@ -77,6 +80,7 @@ namespace MedicalPlus.Controllers
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString()
             };
+           
 
             var res = await this._userManager.CreateAsync(user, model.Password);
             if (!res.Succeeded)
@@ -86,6 +90,47 @@ namespace MedicalPlus.Controllers
             this.SetRole(model.UserName, UserRoles.User);
             return Ok();
         }
+
+        [HttpPost]
+        [Authorize(Roles = $"{UserRoles.Admin},{UserRoles.Doctor}")]
+        [Route("create")]
+        public async Task<IActionResult> CreateUser([FromBody] EmployeeModel model)
+        {
+            var userEx = await _userManager.FindByNameAsync(model.UserName);
+            if (userEx != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, "User in db already");
+
+            Gender? gender = _unitOfWorks.GenderRepo.GetAll().Result.FirstOrDefault(g => g.IdGender.Equals(model.Gender.IdGender));
+            if (gender == null)
+            {
+                gender = new Gender(model.Gender.Name);
+                _unitOfWorks.GenderRepo.Add(gender);
+                _unitOfWorks.Commit();
+            }
+
+            User user = new()
+            {
+                UserName = model.UserName,
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                IdFioNavigation = new Fio(model.Fio.Name, model.Fio.Surname, model.Fio.Patronymic),
+                IdGenderNavigation = gender
+            };
+
+            var res = await _userManager.CreateAsync(user, model.Password);
+            if (!res.Succeeded)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, res.Errors);
+            }
+
+            var role = _roleManager.Roles.FirstOrDefault(x=> x.Id.Equals(model.Role.Id));
+            if(role != null)
+                await SetRole(model.UserName, role.Name);
+            else
+                await SetRole(model.UserName, UserRoles.User);
+            return Ok();
+        }
+
 
         [HttpGet]
         [Route("getRoles")]
