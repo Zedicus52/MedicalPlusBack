@@ -11,5 +11,11 @@ namespace Domain.Models.WebModels
         public int IdGender { get; set; }
 
         public string Name { get; set; }
+
+        public GenderModel(int genderIdGender, string genderName)
+        {
+            IdGender = genderIdGender;
+            Name = genderName;
+        }
     }
 }

@@ -1,7 +1,9 @@
 using System.Text;
 using DataAccessEF.Data;
 using DataAccessEF.Repositories;
+using DataAccessEF.UnitOfWorks;
 using Domain.Interfaces;
+using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -56,6 +58,7 @@ builder.Services.AddTransient<ILogRepo, LogRepo>();
 builder.Services.AddTransient<IPatientRepo, PatientRepo>();
 builder.Services.AddTransient<IProblemRepo, ProblemRepo>();
 builder.Services.AddTransient<IUserRepo, UserRepo>();
+builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
 
 builder.Services.AddDbContext<MedicalPlusDbContext>(options =>
     options.UseSqlServer(

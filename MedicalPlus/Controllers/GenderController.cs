@@ -20,9 +20,11 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            return Ok(this._unitOfWorks.GenderRepo.GetAll().Result);
+
+            return Ok(_unitOfWorks.GenderRepo.GetAll().Result);
+
         }
 
 
@@ -54,11 +56,11 @@ namespace MedicalPlus.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(GenderModel gender)
+        public IActionResult Create(GenderModel gender)
         {
             Gender genderModel = new Gender(gender.Name);
-            this._unitOfWorks.GenderRepo.Add(genderModel);
-            this._unitOfWorks.Commit();
+            _unitOfWorks.GenderRepo.Add(genderModel);
+            _unitOfWorks.Commit();
             return Ok();
         }
     }

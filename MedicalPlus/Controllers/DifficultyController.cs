@@ -20,9 +20,9 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            return Ok(this._unitOfWorks.DifficultyRepo.GetAll().Result);
+            return Ok(_unitOfWorks.DifficultyRepo.GetAll().Result);
         }
 
 
