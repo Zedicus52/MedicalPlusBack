@@ -56,7 +56,7 @@ namespace MedicalPlus.Controllers
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create(GenderModel gender)
+        public IActionResult Create([FromBody] GenderModel gender)
         {
             Gender genderModel = new Gender(gender.Name);
             _unitOfWorks.GenderRepo.Add(genderModel);

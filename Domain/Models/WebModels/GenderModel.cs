@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Domain.Models.WebModels
 {
+    [Serializable]
     public class GenderModel
     {
         public int IdGender { get; set; }
 
         public string Name { get; set; }
 
-        public GenderModel(int genderIdGender, string genderName)
+
+        [JsonConstructor]
+        public GenderModel(int IdGender, string Name)
         {
-            IdGender = genderIdGender;
-            Name = genderName;
+            this.IdGender = IdGender;
+            this.Name = Name;
         }
     }
 }

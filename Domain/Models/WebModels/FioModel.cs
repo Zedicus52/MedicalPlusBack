@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace Domain.Models.WebModels
 {
+    [Serializable]
     public class FioModel
     {
         public int IdFio { get; set; }
@@ -16,12 +13,14 @@ namespace Domain.Models.WebModels
 
         public string Patronymic { get; set; }
 
-        public FioModel(int fioIdFio, string fioName, string fioSurname, string fioPatronymic)
+        [JsonConstructor]
+        public FioModel(int IdFio, string Name, string Surname, string Patronymic)
         {
-            IdFio = fioIdFio;
-            Name = fioName;
-            Surname = fioSurname;
-            Patronymic = fioPatronymic;
+            this.IdFio = IdFio;
+            this.Name = Name;
+            this.Surname = Surname;
+            this.Patronymic = Patronymic;
         }
+
     }
 }

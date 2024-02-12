@@ -67,10 +67,27 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Patient patient)
+        public async Task<IActionResult> Update([FromBody] PatientModel patient)
         {
-            this._unitOfWorks.PatientRepo.Update(patient);
-            this._unitOfWorks.Commit();
+            Patient dbPatient = _unitOfWorks.PatientRepo.GetAll().Result.FirstOrDefault(p => p.IdPatient.Equals(patient.IdPatient));
+            if (dbPatient != null)
+            {
+                dbPatient.BirthDate = patient.BirthDate;
+                dbPatient.PhoneNumber = patient.PhoneNumber;
+
+                Fio fio = _unitOfWorks.FioRepo.GetAll().Result.FirstOrDefault(f => f.IdFio.Equals(patient.Fio.IdFio));
+                if (fio != null)
+                {
+                    fio.Surname = patient.Fio.Surname;
+                    fio.Name = patient.Fio.Name;
+                    fio.Patronymic = patient.Fio.Patronymic;
+                }
+
+                Gender gender = _unitOfWorks.GenderRepo.GetAll().Result.FirstOrDefault(g => g.IdGender.Equals(patient.Gender.IdGender));
+                if (gender != null)
+                    dbPatient.IdGender = gender.IdGender;
+            }
+            _unitOfWorks.Commit();
             return Ok();
         }
 
