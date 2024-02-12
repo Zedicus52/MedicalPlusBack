@@ -11,6 +11,7 @@ public partial class Problem
     public string IdUser { get; set; }
 
     public int? IdDifficulty { get; set; }
+    public int? IdPatient { get; set; }
 
     public string Diagnosis { get; set; } = null!;
 
@@ -25,14 +26,15 @@ public partial class Problem
     public virtual Difficulty? IdDifficultyNavigation { get; set; }
 
     public virtual User IdUserNavigation { get; set; } = null!;
+    public virtual Patient IdPatientNavigation { get; set; } = null!;
 
-    public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
+  //  public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
 
     public Problem()
     {
         
     }
-    public Problem(string diagnosis, string micro, string macro, DateTime creation, DateTime change, User user, Difficulty difficulty)
+    public Problem(string diagnosis, string micro, string macro, DateTime creation, DateTime change, User user, Difficulty difficulty,Patient patient)
     {
         this.IdDifficultyNavigation = difficulty;
         this.IdDifficulty = difficulty.IdDifficulty;
@@ -40,6 +42,8 @@ public partial class Problem
         this.MacroDesc = macro;
         this.Diagnosis = diagnosis;
         this.IdUser = user.Id;
+        this.IdPatient = patient.IdPatient;
+        this.IdPatientNavigation = patient;
         this.IdUserNavigation = user;
         this.CreationDate = creation;
         this.ChangeDate = change;

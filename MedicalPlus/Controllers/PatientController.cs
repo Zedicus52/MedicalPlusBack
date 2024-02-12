@@ -22,6 +22,7 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
+
             List<PatientModel> result = new List<PatientModel>();
             var patients = await _unitOfWorks.PatientRepo.GetAll();
             var fios = await _unitOfWorks.FioRepo.GetAll();

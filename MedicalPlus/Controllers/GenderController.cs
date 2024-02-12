@@ -22,7 +22,9 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public IActionResult GetAll()
         {
+
             return Ok(_unitOfWorks.GenderRepo.GetAll().Result);
+
         }
 
 

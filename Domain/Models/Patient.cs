@@ -9,7 +9,6 @@ public partial class Patient
 {
     public int IdPatient { get; set; }
 
-    public int? IdProblem { get; set; }
 
     public int? IdGender { get; set; }
 
@@ -25,7 +24,8 @@ public partial class Patient
 
     public Gender? IdGenderNavigation { get; set; }
 
-    public Problem? IdProblemNavigation { get; set; }
+   // public Problem? IdProblemNavigation { get; set; }
+    public virtual ICollection<Problem> Problems { get; set; } = new List<Problem>();
 
     public Patient()
     {

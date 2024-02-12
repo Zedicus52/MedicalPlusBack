@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class ProblemController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public ProblemController(UnitOfWorks unitOfWorks)
+        public ProblemController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }
@@ -22,7 +22,7 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(this._unitOfWorks.ProblemRepo.GetAll());
+            return Ok(this._unitOfWorks.ProblemRepo.GetAll().Result);
         }
 
 
@@ -58,7 +58,8 @@ namespace MedicalPlus.Controllers
         {
             User user = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
             Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty.ToString());
-            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty);
+            Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient.ToString());
+            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty,patient);
             this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();
             return Ok();

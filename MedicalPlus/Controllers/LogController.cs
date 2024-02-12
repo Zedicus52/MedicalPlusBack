@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class LogController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public LogController(UnitOfWorks unitOfWorks)
+        public LogController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }
@@ -22,7 +22,7 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(this._unitOfWorks.LogRepo.GetAll());
+            return Ok(this._unitOfWorks.LogRepo.GetAll().Result);
         }
 
 

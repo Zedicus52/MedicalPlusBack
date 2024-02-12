@@ -13,7 +13,7 @@ namespace MedicalPlus.Controllers
     public class ActionController : Controller
     {
         private readonly IUnitOfWorks _unitOfWorks;
-        public ActionController(UnitOfWorks unitOfWorks)
+        public ActionController(IUnitOfWorks unitOfWorks)
         {
             this._unitOfWorks = unitOfWorks;
         }
@@ -22,7 +22,7 @@ namespace MedicalPlus.Controllers
         [Route("getAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(this._unitOfWorks.ActionRepo.GetAll());
+            return Ok(this._unitOfWorks.ActionRepo.GetAll().Result);
         }
 
 
