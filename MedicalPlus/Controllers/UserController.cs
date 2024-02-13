@@ -47,7 +47,7 @@ namespace MedicalPlus.Controllers
                 }
 
                 Fio fio = fios.FirstOrDefault(x=>x.IdFio==user.IdFio);
-                Gender gender = genders.FirstOrDefault(x => x.IdGender == user.IdGender);
+                Gender gender = genders.FirstOrDefault(x => x.IdGender == user.IdGenderNavigation.IdGender);
                 EmployeeModel employee = new EmployeeModel()
                 {
                     Email = user.Email,
