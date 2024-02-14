@@ -1,5 +1,6 @@
 ﻿using DataAccessEF.Repositories;
 using DataAccessEF.UnitOfWorks;
+using Domain.Identity;
 using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
 using Domain.Models.WebModels;
@@ -7,6 +8,7 @@ using MedicalPlus.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -43,7 +45,7 @@ namespace MedicalPlus.Controllers
                 if (roles.Count != 0)
                 {
                     var temp = await _roleManager.FindByNameAsync(roles[0]);
-                    role = new RoleModel() { Id = temp.Id, Name = temp.Name };
+                    role = GetRoleByName(temp);
                 }
 
                 Fio fio = fios.FirstOrDefault(x=>x.IdFio==user.IdFio);
@@ -110,11 +112,51 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(User user)
+        public async Task<IActionResult> Update([FromBody]EmployeeModel employee)
         {
-            this._unitOfWorks.UserRepo.Update(user);
-            this._unitOfWorks.Commit();
+            User dbEmployee = _unitOfWorks.UserRepo.GetAll().Result.FirstOrDefault(p => p.Id.Equals(employee.UserId));
+            if (dbEmployee != null)
+            {
+                Fio fio = _unitOfWorks.FioRepo.GetAll().Result.FirstOrDefault(f => f.IdFio.Equals(employee.Fio.IdFio));
+                if (fio != null)
+                {
+                    fio.Surname = employee.Fio.Surname;
+                    fio.Name = employee.Fio.Name;
+                    fio.Patronymic = employee.Fio.Patronymic;
+                }
+
+                Gender gender = _unitOfWorks.GenderRepo.GetAll().Result.FirstOrDefault(g => g.IdGender.Equals(employee.Gender.IdGender));
+                if (gender != null)
+                    dbEmployee.IdGenderNavigation = gender;
+
+                var roles = await _userManager.GetRolesAsync(dbEmployee);
+                await _userManager.RemoveFromRolesAsync(dbEmployee, roles);
+                var role = _roleManager.Roles.FirstOrDefault(x => x.Id.Equals(employee.Role.Id));
+                if (role != null)
+                    await _userManager.AddToRoleAsync(dbEmployee, role.Name);
+                else
+                    await _userManager.AddToRoleAsync(dbEmployee, UserRoles.User);
+
+            }
+            _unitOfWorks.Commit();
             return Ok();
+        }
+
+        private RoleModel GetRoleByName(IdentityRole role)
+        {
+            RoleModel model = new()
+            {
+                Id = role.Id
+            };
+            model.Name = role.Name switch
+            {
+                UserRoles.Admin => "Адміністратор",
+                UserRoles.Doctor => "Доктор",
+                UserRoles.Assistant => "Лаборант",
+                UserRoles.Recorder => "Регістратор",
+                _ => model.Name
+            };
+            return model;
         }
     }
 }
