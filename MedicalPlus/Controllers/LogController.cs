@@ -28,7 +28,7 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getById")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(this._unitOfWorks.LogRepo.GetById(id));
         }
@@ -36,7 +36,7 @@ namespace MedicalPlus.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             this._unitOfWorks.LogRepo.Delete(id);
             this._unitOfWorks.Commit();
@@ -58,7 +58,7 @@ namespace MedicalPlus.Controllers
         public async Task<IActionResult> Create(LogModel log)
         {
 
-            LogAction logAction= await this._unitOfWorks.ActionRepo.GetById(log.IdAction.ToString());
+            LogAction logAction= await this._unitOfWorks.ActionRepo.GetById(log.IdAction.GetValueOrDefault());
             User user = await this._unitOfWorks.UserRepo.GetById(log.IdUser.ToString());
             Log logModel = new Log(log.ObjectName, log.Message, DateTime.UtcNow, DateTime.UtcNow, logAction, user);
             this._unitOfWorks.LogRepo.Add(logModel);

@@ -2,7 +2,7 @@ using Domain.Models;
 
 namespace Domain.Interfaces;
 
-public interface IUserRepo : IGenericRepo<User>
+public interface IUserRepo : IGenericRepo<User, string>
 {
     
 }

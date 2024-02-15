@@ -20,15 +20,25 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_unitOfWorks.DifficultyRepo.GetAll().Result);
+            List<Difficulty> difficulties = await _unitOfWorks.DifficultyRepo.GetAll();
+            List<DifficultyModel> difficultyModels = new List<DifficultyModel>();   
+            foreach (Difficulty difficulty in difficulties)
+            {
+            DifficultyModel model = new DifficultyModel();
+                model.IdDifficulty = difficulty.IdDifficulty;
+                model.Name= difficulty.Name;
+
+            }
+
+            return Ok(difficultyModels);
         }
 
 
         [HttpGet]
         [Route("getById")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(this._unitOfWorks.DifficultyRepo.GetById(id));
         }
@@ -36,7 +46,7 @@ namespace MedicalPlus.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             this._unitOfWorks.DifficultyRepo.Delete(id);
             this._unitOfWorks.Commit();

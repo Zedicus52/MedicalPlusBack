@@ -28,7 +28,7 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getById")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(this._unitOfWorks.ProblemRepo.GetById(id));
         }
@@ -36,7 +36,7 @@ namespace MedicalPlus.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             this._unitOfWorks.ProblemRepo.Delete(id);
             this._unitOfWorks.Commit();
@@ -57,8 +57,8 @@ namespace MedicalPlus.Controllers
         public async Task<IActionResult> Create(ProblemModel problem)
         {
             User user = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
-            Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty.ToString());
-            Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient.ToString());
+            Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
+            Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
             Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty,patient);
             this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();

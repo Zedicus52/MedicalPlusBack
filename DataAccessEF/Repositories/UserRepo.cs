@@ -4,7 +4,7 @@ using Domain.Models;
 
 namespace DataAccessEF.Repositories;
 
-public class UserRepo : GenericRepo<User>, IUserRepo
+public class UserRepo : GenericRepo<User,string>, IUserRepo
 {
     public UserRepo(MedicalPlusDbContext dbContext) : base(dbContext)
     {
