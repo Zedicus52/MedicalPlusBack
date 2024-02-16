@@ -29,7 +29,7 @@ namespace MedicalPlus.Controllers
             DifficultyModel model = new DifficultyModel();
                 model.IdDifficulty = difficulty.IdDifficulty;
                 model.Name= difficulty.Name;
-
+                difficultyModels.Add(model);
             }
 
             return Ok(difficultyModels);
