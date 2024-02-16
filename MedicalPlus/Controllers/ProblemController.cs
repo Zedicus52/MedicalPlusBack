@@ -45,9 +45,25 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Problem problem)
+        public async Task<IActionResult> Update(ProblemModel problem)
         {
-            this._unitOfWorks.ProblemRepo.Update(problem);
+
+            Problem newProblem = await this._unitOfWorks.ProblemRepo.GetById(problem.IdProblem);
+            newProblem.ChangeDate = DateTime.Now;
+            newProblem.MacroDesc = problem.MacroDesc;
+            newProblem.MicroDesc = problem.MicroDesc;
+            newProblem.Diagnosis = problem.Diagnosis;
+
+            newProblem.IdDifficulty = problem.IdDifficulty;
+            newProblem.IdDifficultyNavigation = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
+
+            newProblem.IdPatient = problem.IdPatient;
+            newProblem.IdPatientNavigation = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
+
+            newProblem.IdUser = problem.IdUser;
+            newProblem.IdUserNavigation = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
+
+            this._unitOfWorks.ProblemRepo.Update(newProblem);
             this._unitOfWorks.Commit();
             return Ok();
         }
@@ -59,7 +75,7 @@ namespace MedicalPlus.Controllers
             User user = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
             Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
             Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
-            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty,patient);
+            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty, patient);
             this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();
             return Ok();

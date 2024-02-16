@@ -47,9 +47,12 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Gender gender)
+        public async Task<IActionResult> Update(GenderModel gender)
         {
-            this._unitOfWorks.GenderRepo.Update(gender);
+
+            Gender newGender = await this._unitOfWorks.GenderRepo.GetById(gender.IdGender);
+            newGender.Name= gender.Name;    
+            this._unitOfWorks.GenderRepo.Update(newGender);
             this._unitOfWorks.Commit();
             return Ok();
         }

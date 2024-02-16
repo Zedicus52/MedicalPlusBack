@@ -55,9 +55,13 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Difficulty difficulty)
+        public async Task<IActionResult> Update(DifficultyModel difficulty)
         {
-            this._unitOfWorks.DifficultyRepo.Update(difficulty);
+
+            Difficulty newDifficulty = await this._unitOfWorks.DifficultyRepo.GetById(difficulty.IdDifficulty);
+            newDifficulty.Name = difficulty.Name;
+
+            this._unitOfWorks.DifficultyRepo.Update(newDifficulty);
             this._unitOfWorks.Commit();
             return Ok();
         }

@@ -45,9 +45,15 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Fio fio)
+        public async Task<IActionResult> Update(FioModel fio)
         {
-            this._unitOfWorks.FioRepo.Update(fio);
+
+            Fio newFio = await this._unitOfWorks.FioRepo.GetById(fio.IdFio);
+            newFio.Surname = fio.Surname;
+            newFio.Patronymic= fio.Patronymic; 
+            newFio.Name = fio.Name; 
+
+            this._unitOfWorks.FioRepo.Update(newFio);
             this._unitOfWorks.Commit();
             return Ok();
         }
