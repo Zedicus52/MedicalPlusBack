@@ -4,6 +4,7 @@ using Domain.Models;
 using Domain.Models.WebModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace MedicalPlus.Controllers
 {
@@ -60,8 +61,11 @@ namespace MedicalPlus.Controllers
             newProblem.IdPatient = problem.IdPatient;
             newProblem.IdPatientNavigation = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
 
-            newProblem.IdUser = problem.IdUser;
-            newProblem.IdUserNavigation = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
+            var identity = User.Identity as ClaimsIdentity;
+            User user = await this._unitOfWorks.UserRepo.GetByName(identity.Name);
+            
+            newProblem.IdUser = user.Id;
+            newProblem.IdUserNavigation = user;
 
             this._unitOfWorks.ProblemRepo.Update(newProblem);
             this._unitOfWorks.Commit();
@@ -72,7 +76,9 @@ namespace MedicalPlus.Controllers
         [Route("create")]
         public async Task<IActionResult> Create(ProblemModel problem)
         {
-            User user = await this._unitOfWorks.UserRepo.GetById(problem.IdUser);
+
+            var identity = User.Identity as ClaimsIdentity;
+            User user = await this._unitOfWorks.UserRepo.GetByName(identity.Name);
             Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
             Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
             Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty, patient);
