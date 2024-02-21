@@ -35,7 +35,8 @@ namespace MedicalPlus.Controllers
                     PhoneNumber = patient.PhoneNumber,
                     ApplicationDate = patient.ApplicationDate,
                     BirthDate = patient.BirthDate,
-                    IdPatient = patient.IdPatient
+                    IdPatient = patient.IdPatient,
+                    MedicalCardNumber = patient.MedicalCardNumber,
                 };
                 Fio fio = fios.FirstOrDefault(x => x.IdFio.Equals(patient.IdFio));
                 Gender gender = genders.FirstOrDefault(x => x.IdGender.Equals(patient.IdGender));
@@ -74,6 +75,7 @@ namespace MedicalPlus.Controllers
             {
                 dbPatient.BirthDate = patient.BirthDate;
                 dbPatient.PhoneNumber = patient.PhoneNumber;
+                dbPatient.MedicalCardNumber = patient.MedicalCardNumber;    
 
                 Fio fio = _unitOfWorks.FioRepo.GetAll().Result.FirstOrDefault(f => f.IdFio.Equals(patient.Fio.IdFio));
                 if (fio != null)
@@ -107,7 +109,7 @@ namespace MedicalPlus.Controllers
                 _unitOfWorks.Commit();
             }
             
-            Patient patientModel = new Patient(patient.PhoneNumber, patient.BirthDate, patient.ApplicationDate, fio, gender);
+            Patient patientModel = new Patient(patient.PhoneNumber,patient.MedicalCardNumber, patient.BirthDate, patient.ApplicationDate, fio, gender);
             _unitOfWorks.PatientRepo.Add(patientModel);
             _unitOfWorks.Commit();
             return Ok();

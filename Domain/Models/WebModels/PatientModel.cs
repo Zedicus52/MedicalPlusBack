@@ -12,6 +12,7 @@ namespace Domain.Models.WebModels
         public int IdPatient { get; set; }
 
         public int PhoneNumber { get; set; }
+        public int MedicalCardNumber { get; set; }
 
         public DateTime BirthDate { get; set; }
 

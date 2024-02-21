@@ -54,6 +54,9 @@ namespace MedicalPlus.Controllers
             newProblem.MacroDesc = problem.MacroDesc;
             newProblem.MicroDesc = problem.MicroDesc;
             newProblem.Diagnosis = problem.Diagnosis;
+            newProblem.ClinicalData = problem.ClinicalData;
+            newProblem.OperationDate = problem.OperationDate;
+            newProblem.OperationType = problem.OperationType;
 
             newProblem.IdDifficulty = problem.IdDifficulty;
             newProblem.IdDifficultyNavigation = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
@@ -81,7 +84,8 @@ namespace MedicalPlus.Controllers
             User user = await this._unitOfWorks.UserRepo.GetByName(identity.Name);
             Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
             Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
-            Problem problemModel = new Problem(problem.Diagnosis, problem.MicroDesc, problem.MacroDesc, DateTime.UtcNow, DateTime.UtcNow, user, difficulty, patient);
+            Problem problemModel = new Problem(problem.Diagnosis, problem.ClinicalData, problem.MicroDesc, problem.MacroDesc, problem.OperationType, 
+                DateTime.UtcNow, problem.OperationDate, DateTime.UtcNow, user, difficulty, patient);
             this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();
             return Ok();
