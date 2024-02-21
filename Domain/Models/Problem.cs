@@ -15,6 +15,7 @@ public partial class Problem
     public int? IdPatient { get; set; }
 
     public string Diagnosis { get; set; } = null!;
+    public string ResearchNumber { get; set; } = null!;
     public string ClinicalData { get; set; } = null!;
     public string OperationType { get; set; } = null!;
 
@@ -39,7 +40,7 @@ public partial class Problem
     {
         
     }
-    public Problem(string diagnosis, string clinicalData, string micro, string macro, string operationType, DateTime creation, DateTime operaionDate, DateTime change, User user, Difficulty difficulty,Patient patient)
+    public Problem(string researchNumber,string diagnosis, string clinicalData, string micro, string macro, string operationType, DateTime creation, DateTime operaionDate, DateTime change, User user, Difficulty difficulty,Patient patient)
     {
         this.IdDifficultyNavigation = difficulty;
         this.IdDifficulty = difficulty.IdDifficulty;
@@ -57,5 +58,6 @@ public partial class Problem
         OperationDate = operaionDate;
         ClinicalData = clinicalData;
         OperationType=  operationType;
+        ResearchNumber = researchNumber;
     }
 }

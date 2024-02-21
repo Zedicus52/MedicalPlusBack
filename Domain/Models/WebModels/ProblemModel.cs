@@ -17,6 +17,7 @@ namespace Domain.Models.WebModels
         public int IdPatient { get; set; }
 
         public string Diagnosis { get; set; } 
+        public string ResearchNumber { get; set; } 
         public string ClinicalData { get; set; } 
         public string OperationType { get; set; }
         public DateTime OperationDate { get; set; }

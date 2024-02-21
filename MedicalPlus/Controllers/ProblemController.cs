@@ -34,6 +34,14 @@ namespace MedicalPlus.Controllers
             return Ok(this._unitOfWorks.ProblemRepo.GetById(id));
         }
 
+        [HttpGet]
+        [Route("getByPatientId")]
+        public async Task<IActionResult> GetByPatientId(int patientId)
+        {
+            var dbProblems = _unitOfWorks.ProblemRepo.GetAll().Result.Where(p => p.IdPatient.Equals(patientId));
+            return Ok(dbProblems);
+        }
+
 
         [HttpDelete]
         [Route("delete")]
@@ -50,6 +58,7 @@ namespace MedicalPlus.Controllers
         {
 
             Problem newProblem = await this._unitOfWorks.ProblemRepo.GetById(problem.IdProblem);
+            newProblem.ResearchNumber = problem.ResearchNumber;
             newProblem.ChangeDate = DateTime.Now;
             newProblem.MacroDesc = problem.MacroDesc;
             newProblem.MicroDesc = problem.MicroDesc;
@@ -77,14 +86,14 @@ namespace MedicalPlus.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create(ProblemModel problem)
+        public async Task<IActionResult> Create([FromBody]ProblemModel problem)
         {
 
             var identity = User.Identity as ClaimsIdentity;
             User user = await this._unitOfWorks.UserRepo.GetByName(identity.Name);
             Difficulty difficulty = await this._unitOfWorks.DifficultyRepo.GetById(problem.IdDifficulty);
             Patient patient = await this._unitOfWorks.PatientRepo.GetById(problem.IdPatient);
-            Problem problemModel = new Problem(problem.Diagnosis, problem.ClinicalData, problem.MicroDesc, problem.MacroDesc, problem.OperationType, 
+            Problem problemModel = new Problem(problem.ResearchNumber,problem.Diagnosis, problem.ClinicalData, problem.MicroDesc, problem.MacroDesc, problem.OperationType, 
                 DateTime.UtcNow, problem.OperationDate, DateTime.UtcNow, user, difficulty, patient);
             this._unitOfWorks.ProblemRepo.Add(problemModel);
             this._unitOfWorks.Commit();
