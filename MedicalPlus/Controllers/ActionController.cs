@@ -28,7 +28,7 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getById")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(this._unitOfWorks.ActionRepo.GetById(id));
         }
@@ -36,7 +36,7 @@ namespace MedicalPlus.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             this._unitOfWorks.ActionRepo.Delete(id);
             this._unitOfWorks.Commit();

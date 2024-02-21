@@ -20,15 +20,25 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(_unitOfWorks.DifficultyRepo.GetAll().Result);
+            List<Difficulty> difficulties = await _unitOfWorks.DifficultyRepo.GetAll();
+            List<DifficultyModel> difficultyModels = new List<DifficultyModel>();   
+            foreach (Difficulty difficulty in difficulties)
+            {
+            DifficultyModel model = new DifficultyModel();
+                model.IdDifficulty = difficulty.IdDifficulty;
+                model.Name= difficulty.Name;
+                difficultyModels.Add(model);
+            }
+
+            return Ok(difficultyModels);
         }
 
 
         [HttpGet]
         [Route("getById")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(this._unitOfWorks.DifficultyRepo.GetById(id));
         }
@@ -36,7 +46,7 @@ namespace MedicalPlus.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             this._unitOfWorks.DifficultyRepo.Delete(id);
             this._unitOfWorks.Commit();
@@ -45,9 +55,13 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Difficulty difficulty)
+        public async Task<IActionResult> Update(DifficultyModel difficulty)
         {
-            this._unitOfWorks.DifficultyRepo.Update(difficulty);
+
+            Difficulty newDifficulty = await this._unitOfWorks.DifficultyRepo.GetById(difficulty.IdDifficulty);
+            newDifficulty.Name = difficulty.Name;
+
+            this._unitOfWorks.DifficultyRepo.Update(newDifficulty);
             this._unitOfWorks.Commit();
             return Ok();
         }

@@ -48,7 +48,7 @@ namespace MedicalPlus.Controllers
                     role = GetRoleByName(temp);
                 }
 
-                Fio fio = fios.FirstOrDefault(x=>x.IdFio==user.IdFio);
+                Fio fio = fios.FirstOrDefault(x => x.IdFio == user.IdFio);
                 Gender gender = genders.FirstOrDefault(x => x.IdGender == user.IdGenderNavigation.IdGender);
                 EmployeeModel employee = new EmployeeModel()
                 {
@@ -66,6 +66,19 @@ namespace MedicalPlus.Controllers
             return Ok(employees);
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route("getCurrent")]
+        public async Task<IActionResult> GetCurrent()
+        {
+
+            var identity = User.Identity as ClaimsIdentity;
+            User user = await this._unitOfWorks.UserRepo.GetByName(identity.Name);
+            return Ok(user);
+            
+
+
+        }
 
         [HttpGet]
         [Route("getById")]

@@ -1,10 +1,10 @@
 namespace Domain.Interfaces;
 
-public interface IGenericRepo<T> where T : class
+public interface IGenericRepo<T,K> where T : class
 {
     Task<List<T>> GetAll();
-    ValueTask<T?> GetById(string id);
+    ValueTask<T?> GetById(K id);
     void Add(T item);
-    void Delete(string id);
+    void Delete(K id);
     void Update(T item);
 }

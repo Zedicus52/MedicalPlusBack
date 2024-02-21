@@ -49,7 +49,7 @@ builder.Services.AddSwaggerGen(options => {
     });
 });
 
-builder.Services.AddTransient(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+builder.Services.AddTransient(typeof(IGenericRepo<,>), typeof(GenericRepo<,>));
 builder.Services.AddTransient<IActionRepo, ActionRepo>();
 builder.Services.AddTransient<IDifficultyRepo, DifficultyRepo>();
 builder.Services.AddTransient<IFioRepo, FioRepo>();

@@ -2,7 +2,7 @@ using Domain.Models;
 
 namespace Domain.Interfaces;
 
-public interface ILogRepo : IGenericRepo<Log>
+public interface ILogRepo : IGenericRepo<Log, int>
 {
     
 }

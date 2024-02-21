@@ -4,7 +4,7 @@ using LogAction = Domain.Models.LogAction;
 
 namespace DataAccessEF.Repositories;
 
-public class ActionRepo : GenericRepo<LogAction>, IActionRepo
+public class ActionRepo : GenericRepo<LogAction, int>, IActionRepo
 {
     public ActionRepo(MedicalPlusDbContext dbContext) : base(dbContext)
     {

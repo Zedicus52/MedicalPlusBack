@@ -28,7 +28,7 @@ namespace MedicalPlus.Controllers
 
         [HttpGet]
         [Route("getById")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetById(int id)
         {
             return Ok(this._unitOfWorks.FioRepo.GetById(id));
         }
@@ -36,7 +36,7 @@ namespace MedicalPlus.Controllers
 
         [HttpDelete]
         [Route("delete")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(int id)
         {
             this._unitOfWorks.FioRepo.Delete(id);
             this._unitOfWorks.Commit();
@@ -45,9 +45,15 @@ namespace MedicalPlus.Controllers
 
         [HttpPut]
         [Route("update")]
-        public async Task<IActionResult> Update(Fio fio)
+        public async Task<IActionResult> Update(FioModel fio)
         {
-            this._unitOfWorks.FioRepo.Update(fio);
+
+            Fio newFio = await this._unitOfWorks.FioRepo.GetById(fio.IdFio);
+            newFio.Surname = fio.Surname;
+            newFio.Patronymic= fio.Patronymic; 
+            newFio.Name = fio.Name; 
+
+            this._unitOfWorks.FioRepo.Update(newFio);
             this._unitOfWorks.Commit();
             return Ok();
         }
