@@ -1,9 +1,13 @@
 using System.Text;
 using DataAccessEF.Data;
 using DataAccessEF.Repositories;
+using DataAccessEF.UnitOfWorks;
 using Domain.Interfaces;
+using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -45,7 +49,7 @@ builder.Services.AddSwaggerGen(options => {
     });
 });
 
-builder.Services.AddTransient(typeof(IGenericRepo<>), typeof(GenericRepo<>));
+builder.Services.AddTransient(typeof(IGenericRepo<,>), typeof(GenericRepo<,>));
 builder.Services.AddTransient<IActionRepo, ActionRepo>();
 builder.Services.AddTransient<IDifficultyRepo, DifficultyRepo>();
 builder.Services.AddTransient<IFioRepo, FioRepo>();
@@ -53,15 +57,17 @@ builder.Services.AddTransient<IGenderRepo, GenderRepo>();
 builder.Services.AddTransient<ILogRepo, LogRepo>();
 builder.Services.AddTransient<IPatientRepo, PatientRepo>();
 builder.Services.AddTransient<IProblemRepo, ProblemRepo>();
-builder.Services.AddTransient<IRoleRepo, RoleRepo>();
 builder.Services.AddTransient<IUserRepo, UserRepo>();
+builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
 
 builder.Services.AddDbContext<MedicalPlusDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("Local"),
         b => b.MigrationsAssembly(typeof(MedicalPlusDbContext).Assembly.FullName)));
 
-
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<MedicalPlusDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(opt => 
 {
@@ -98,8 +104,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 

@@ -4,7 +4,7 @@ using Domain.Models;
 
 namespace DataAccessEF.Repositories;
 
-public class ProblemRepo : GenericRepo<Problem>, IProblemRepo
+public class ProblemRepo : GenericRepo<Problem, int>, IProblemRepo
 {
     public ProblemRepo(MedicalPlusDbContext dbContext) : base(dbContext)
     {

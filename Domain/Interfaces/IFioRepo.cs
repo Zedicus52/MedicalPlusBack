@@ -2,7 +2,7 @@ using Domain.Models;
 
 namespace Domain.Interfaces;
 
-public interface IFioRepo : IGenericRepo<Fio>
+public interface IFioRepo : IGenericRepo<Fio, int>
 {
     
 }

@@ -4,7 +4,7 @@ using Domain.Models;
 
 namespace DataAccessEF.Repositories;
 
-public class LogRepo : GenericRepo<Log>, ILogRepo
+public class LogRepo : GenericRepo<Log, int>, ILogRepo
 {
     public LogRepo(MedicalPlusDbContext dbContext) : base(dbContext)
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccessEF.Repositories;
 
-public class GenericRepo<T> : IGenericRepo<T> where T : class
+public class GenericRepo<T,K> : IGenericRepo<T,K> where T : class
 {
     protected readonly MedicalPlusDbContext _dbContext;
 
@@ -18,7 +18,7 @@ public class GenericRepo<T> : IGenericRepo<T> where T : class
         return _dbContext.Set<T>().ToListAsync();
     }
 
-    public ValueTask<T?> GetById(int id)
+    public ValueTask<T?> GetById(K id)
     {
         return _dbContext.Set<T>().FindAsync(id);
     }
@@ -28,7 +28,7 @@ public class GenericRepo<T> : IGenericRepo<T> where T : class
         _dbContext.Set<T>().Add(item);
     }
 
-    public void Delete(int id)
+    public void Delete(K id)
     {
         var item = _dbContext.Set<T>().Find(id);
         if (item != null) 
